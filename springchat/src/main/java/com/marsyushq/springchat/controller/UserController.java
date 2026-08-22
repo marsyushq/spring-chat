@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.marsyushq.springchat.dto.CreateUserRequest;
 import com.marsyushq.springchat.dto.UserResponse;
 import com.marsyushq.springchat.service.UserService;
+import com.marsyushq.springchat.dto.LoginRequest;
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,5 +22,10 @@ public class UserController {
     @PostMapping
     public UserResponse createUser(@RequestBody CreateUserRequest req){
         return userService.createUser(req); 
+    }
+
+    @PostMapping("/login")
+    public UserResponse login(@RequestBody LoginRequest req){
+        return userService.login(req.getEmail(), req.getPassword());
     }
 }
