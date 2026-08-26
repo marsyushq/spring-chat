@@ -7,7 +7,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.marsyushq.springchat.repository.UserRepository;
 import com.marsyushq.springchat.dto.CreateUserRequest;
+import com.marsyushq.springchat.dto.LoginResponse;
 import com.marsyushq.springchat.dto.UserResponse;
+import com.marsyushq.springchat.model.Role;
 import com.marsyushq.springchat.model.User;
 import java.util.Optional;
 
@@ -16,10 +18,12 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JWTService jwtService; 
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, JWTService jwtService){
         this.userRepository = userRepository; 
         this.passwordEncoder = passwordEncoder; 
+        this.jwtService = jwtService;
     }
 
     public UserResponse createUser(CreateUserRequest req){
@@ -28,13 +32,14 @@ public class UserService {
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setRole(Role.USER); 
 
         User savedUser = userRepository.save(user);
 
         return new UserResponse(savedUser.getId(),savedUser.getUsername(),savedUser.getEmail());
     }
 
-    public UserResponse login(String email, String password){
+    public LoginResponse login(String email, String password){
         Optional<User> user  = userRepository.findByEmail(email);
 
         if(user.isEmpty()){
@@ -45,7 +50,10 @@ public class UserService {
         if(!passwordEncoder.matches(password, existingUser.getPassword())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
         } 
-        return new UserResponse(existingUser.getId(), existingUser.getUsername(), existingUser.getEmail()); 
+        String token = jwtService.generateToken(existingUser);
+
+        UserResponse userResponse = new UserResponse(existingUser.getId(), existingUser.getUsername(), existingUser.getEmail());
+        return new LoginResponse(token, userResponse); 
     }
 
 }
