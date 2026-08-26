@@ -1,5 +1,7 @@
 package com.marsyushq.springchat.model;
 
+import java.time.Instant;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,7 +14,8 @@ public class User {
     private String email; 
     private String password;
     private Role role;
-    private AccountStatus status; 
+    private AccountStatus status;
+    private Instant createdAt; 
     
     // Getters & setters 
     public String getId() {
@@ -62,5 +65,13 @@ public class User {
     public void setStatus(AccountStatus status) {
         this.status = status;
     } 
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
 }
 
