@@ -9,6 +9,7 @@ import com.marsyushq.springchat.repository.UserRepository;
 import com.marsyushq.springchat.dto.CreateUserRequest;
 import com.marsyushq.springchat.dto.LoginResponse;
 import com.marsyushq.springchat.dto.UserResponse;
+import com.marsyushq.springchat.model.AccountStatus;
 import com.marsyushq.springchat.model.Role;
 import com.marsyushq.springchat.model.User;
 import java.util.Optional;
@@ -33,6 +34,7 @@ public class UserService {
         user.setEmail(req.getEmail());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setRole(Role.USER); 
+        user.setStatus(AccountStatus.ACTIVE);
 
         User savedUser = userRepository.save(user);
 
@@ -49,7 +51,10 @@ public class UserService {
         User existingUser = user.get();
         if(!passwordEncoder.matches(password, existingUser.getPassword())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
-        } 
+        }
+        if(existingUser.getStatus() != AccountStatus.ACTIVE){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        }
         String token = jwtService.generateToken(existingUser);
 
         UserResponse userResponse = new UserResponse(existingUser.getId(), existingUser.getUsername(), existingUser.getEmail());

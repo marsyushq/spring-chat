@@ -12,6 +12,7 @@ public class User {
     private String email; 
     private String password;
     private Role role;
+    private AccountStatus status; 
     
     // Getters & setters 
     public String getId() {
@@ -53,5 +54,13 @@ public class User {
     public void setRole(Role role){
         this.role = role; 
     }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
+    } 
 }
 
