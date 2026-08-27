@@ -13,6 +13,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 
+/**
+ * Handles JWT token generation and extraction of authentication claims.
+ * 
+ * Creates tokens for authenticated users and extracts
+ * user information from existing tokens.
+ */
 @Service
 public class JWTService {
 

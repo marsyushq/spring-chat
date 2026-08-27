@@ -23,6 +23,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Security filter responsible for processing JWT authentication.
+ * 
+ * Gets the token from the request, finds the user, and sets
+ * the user's authentication and role in Spring Security's SecurityContext.
+ */
 public class JWTAuthenticationFilter extends OncePerRequestFilter{
 
     private final JWTService jwtService;
