@@ -2,11 +2,13 @@ package com.marsyushq.springchat.model;
 
 import java.time.Instant;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="users")
 public class User {
+    
     @Id
     private String id; 
     
@@ -15,6 +17,8 @@ public class User {
     private String password;
     private Role role;
     private AccountStatus status;
+
+    @CreatedDate
     private Instant createdAt; 
     
     // Getters & setters 

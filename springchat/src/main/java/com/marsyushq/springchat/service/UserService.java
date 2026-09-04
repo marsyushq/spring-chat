@@ -13,7 +13,6 @@ import com.marsyushq.springchat.model.AccountStatus;
 import com.marsyushq.springchat.model.Role;
 import com.marsyushq.springchat.model.User;
 
-import java.time.Instant;
 import java.util.Optional;
 
 
@@ -37,7 +36,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setRole(Role.USER); 
         user.setStatus(AccountStatus.ACTIVE);
-        user.setCreatedAt(Instant.now());
         
         User savedUser = userRepository.save(user);
 
